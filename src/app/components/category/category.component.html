@@ -1,0 +1,12 @@
+<div class="flex flex-row lg:flex-col p-4 bg-gray-400 w-full lg:h-full">
+  <span class="cursor-pointer" (click)="onClickCategory(null)">
+    All categories</span
+  >
+  <span
+    *ngFor="let category of ($categories | async)?.resultData"
+    class="cursor-pointer"
+    (click)="onClickCategory(category)"
+  >
+    {{ category?.name }}
+  </span>
+</div>
