@@ -1,0 +1,54 @@
+<mat-card class="w-full p-6">
+  <div class="flex">
+    <img
+      class="shadow-md"
+      src="https://via.placeholder.com/80"
+      alt="placeholderImage"
+    />
+    <div class="flex flex-col ml-3 justify-start">
+      <h1 class="text-lg">{{ post?.title }}</h1>
+      <span class="text-xs"
+        >{{ post?.createdAt | date : "mediumDate" }} at
+        {{ post?.createdAt | date : "shortTime" }}</span
+      >
+    </div>
+    <div class="ml-auto">
+      <button
+        mat-mini-fab
+        matTooltip="Edit Post"
+        color="primary"
+        (click)="editPost()"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button
+        mat-mini-fab
+        matTooltip="Delete Post"
+        color="warn"
+        (click)="deletePost()"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="max-h-36 overflow-auto my-3">
+    <p>{{ post?.text }}</p>
+  </div>
+  <div class="flex justify-center">
+    <img
+      class="shadow-md mr-3"
+      src="https://via.placeholder.com/100"
+      alt="placeholderImage"
+    />
+    <img
+      class="shadow-md mr-3"
+      src="https://via.placeholder.com/100"
+      alt="placeholderImage"
+    />
+    <img
+      class="shadow-md"
+      src="https://via.placeholder.com/100"
+      alt="placeholderImage"
+    />
+  </div>
+</mat-card>

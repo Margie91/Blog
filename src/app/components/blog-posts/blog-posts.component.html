@@ -1,0 +1,24 @@
+<ng-container class="relative">
+  <div *ngIf="!loadingPosts; else loading" class="flex flex-col w-full">
+    <ng-container *ngIf="posts?.length; else noResults">
+      <app-post
+        class="mb-4"
+        *ngFor="let post of posts"
+        [post]="post"
+        (postDeleted)="onPostDeleted()"
+      ></app-post>
+    </ng-container>
+  </div>
+</ng-container>
+
+<ng-template #noResults>
+  <div class="flex justify-center italic">
+    <p>{{ noResultsMsg }}</p>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <div class="h-full flex justify-center items-center">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+</ng-template>
