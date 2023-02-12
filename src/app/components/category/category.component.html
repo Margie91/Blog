@@ -1,12 +1,32 @@
-<div class="flex flex-row lg:flex-col p-4 bg-gray-400 w-full lg:h-full">
-  <span class="cursor-pointer" (click)="onClickCategory(null)">
-    All categories</span
-  >
+<mat-card
+  class="!flex flex-row flex-nowrap overflow-x-auto lg:overflow-auto lg:flex-col bg-zinc-600 w-full lg:h-full text-white"
+>
+  <div class="flex items-center">
+    <span class="text-xl p-2">Categories</span>
+    <span
+      matTooltip="Add new category"
+      (click)="addNewCategory()"
+      class="cursor-pointer flex p hover:bg-violet-800 rounded-full"
+    >
+      <mat-icon>add</mat-icon>
+    </span>
+  </div>
   <span
-    *ngFor="let category of ($categories | async)?.resultData"
-    class="cursor-pointer"
-    (click)="onClickCategory(category)"
+    class="cursor-pointer p-2 lg:block hover:bg-violet-800/10 border border-transparent hover:border-violet-800 duration-75 rounded-md bg-opacity-10"
+    (click)="onClickCategory(null)"
   >
-    {{ category?.name }}
-  </span>
-</div>
+    All</span
+  >
+  <ng-container *ngIf="$categories | async as categories">
+    <span
+      *ngFor="let category of categories?.resultData"
+      class="cursor-pointer p-2 whitespace-nowrap lg:block border border-transparent hover:border-purple-800 duration-75 rounded-md"
+      (click)="onClickCategory(category)"
+    >
+      {{ category?.name }}
+    </span>
+  </ng-container>
+  <div *ngIf="loadingCategories">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+</mat-card>

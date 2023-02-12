@@ -1,6 +1,11 @@
 export class PatchPostRequest {
-  public id: number;
-  public title?: string;
-  public text?: string;
-  public categoryId?: number;
+  public op: string;
+  public path: PatchPostRequestPath;
+  public value: string;
+}
+
+export enum PatchPostRequestPath {
+  title = '/title',
+  text = '/text',
+  categoryId = '/categoryId',
 }

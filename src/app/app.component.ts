@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { debounceTime, Subject } from 'rxjs';
-import { AddPostDialogComponent } from './components/add-post-dialog/add-post-dialog.component';
+import { AddEditPostDialogComponent } from './components/add-edit-post-dialog/add-edit-post-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +26,9 @@ export class AppComponent implements OnInit {
   }
 
   public addPost(): void {
-    const dialogRef = this.dialog.open(AddPostDialogComponent);
+    const dialogRef = this.dialog.open(AddEditPostDialogComponent, {
+      width: '40rem',
+    });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {

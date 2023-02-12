@@ -1,0 +1,20 @@
+<div class="h-8 my-2">
+  <div
+    *ngIf="message$ | async as message"
+    [ngClass]="{
+      'bg-red-100 border-red-300 text-red-900': message.messageType === 'ERROR',
+      'bg-emerald-100 border-emerald-300 text-emerald-900':
+        message.messageType === 'INFO'
+    }"
+    class="h-8 w-full px-2 m-auto flex items-center justify-between rounded-md border border-solid"
+  >
+    {{ message.message }}
+    <span
+      class="cursor-pointer flex"
+      matTooltip="Discard"
+      (click)="discardError()"
+    >
+      <mat-icon>cancel</mat-icon>
+    </span>
+  </div>
+</div>

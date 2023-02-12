@@ -1,36 +1,59 @@
-<div class="h-full">
-  <div class="bg-zinc-700 flex flex-row items-center justify-between px-3">
-    <h2 class="text-white">My Blog</h2>
-    <div>
-      <mat-form-field class="example-full-width">
-        <input
-          matInput
-          placeholder="Search"
-          [formControl]="searchExperienceField"
-        />
-      </mat-form-field>
-      <span>Link 1</span>
-      <span>Link 2</span>
-      <span>Link 3</span>
-      <span>My Profile</span>
-      <span>Logout</span>
+<nav
+  class="bg-zinc-700 text-white flex flex-row items-center justify-between px-3 py-4"
+>
+  <h2>My Blog</h2>
+  <div>
+    <input
+      class="mr-3 rounded-md px-2 py-1 outline-none text-black"
+      placeholder="Search"
+      [formControl]="searchExperienceField"
+    />
+    <ng-template #menuItems let-mobile>
+      <div [ngClass]="mobile ? 'flex flex-col px-3' : 'inline'">
+        <span [ngClass]="{ 'mr-2': !mobile }">Link 1</span>
+        <hr class="my-1" *ngIf="mobile" />
+        <span [ngClass]="{ 'mr-2': !mobile }">Link 2</span>
+        <hr class="my-1" *ngIf="mobile" />
+        <span [ngClass]="{ 'mr-2': !mobile }">Link 3</span>
+        <hr class="my-1" *ngIf="mobile" />
+        <span [ngClass]="{ 'mr-2': !mobile }">My Profile</span>
+        <hr class="my-1" *ngIf="mobile" />
+        <span>Logout</span>
+      </div>
+    </ng-template>
+    <div class="hidden lg:inline">
+      <ng-container [ngTemplateOutlet]="menuItems"></ng-container>
     </div>
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="block lg:!hidden">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <ng-container
+        *ngTemplateOutlet="menuItems; context: { $implicit: true }"
+      ></ng-container>
+    </mat-menu>
   </div>
-  <button mat-flat-button color="primary" class="ml-auto" (click)="addPost()">
-    Add post
-  </button>
-  <div class="flex flex-col lg:flex-row mt-6 h-full p-4">
-    <!-- <div class="flex flex-col p-4 mr-4 w-1/6 bg-gray-400 h-full">
-      <span *ngFor="let category of ($categories | async)?.resultData">
-        {{ category?.name }}
-      </span>
-    </div> -->
+</nav>
+<div class="p-4 h-full">
+  <div class="flex justify-between">
+    <h1 class="text-3xl">Welcome to my Blog</h1>
+    <button
+      mat-flat-button
+      color="primary"
+      class="flex justify-self-end"
+      (click)="addPost()"
+    >
+      Add post
+    </button>
+  </div>
+  <app-message class="w-full lg:w-[85%] block ml-auto lg:pl-3"></app-message>
+  <div class="flex flex-col lg:flex-row h-full">
     <app-category
-      class="w-full lg:w-1/6 mr-4 mb-4 lg:mb-0"
+      class="w-full lg:w-[15%] mr-4 mb-4 lg:mb-0"
       (pickedCategory)="onCategoryPick($event)"
     ></app-category>
     <app-blog-posts
-      class="w-full"
+      class="w-full lg:w-[85%]"
       [searchInputSubject]="searchInputSubject"
       [newPostSubject]="newPostSubject"
       [pickedCategoryId]="pickedCategoryId"
