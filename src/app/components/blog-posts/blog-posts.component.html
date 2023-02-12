@@ -1,9 +1,10 @@
-<ng-container class="relative">
-  <div *ngIf="!loadingPosts; else loading" class="flex flex-col w-full">
+<ng-container *ngIf="$posts | async as posts">
+  <div class="flex flex-col w-full">
     <ng-container *ngIf="posts?.length; else noResults">
+      <!-- <ng-container *ngIf="posts?.length; else noResults"> -->
       <app-post
         class="mb-4"
-        *ngFor="let post of posts"
+        *ngFor="let post of $posts | async"
         [post]="post"
         (postDeleted)="onPostDeleted()"
       ></app-post>
@@ -17,8 +18,6 @@
   </div>
 </ng-template>
 
-<ng-template #loading>
-  <div class="h-full flex justify-center items-center">
-    <mat-spinner diameter="50"></mat-spinner>
-  </div>
-</ng-template>
+<div *ngIf="loadingPosts" class="h-full flex justify-center items-center">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>

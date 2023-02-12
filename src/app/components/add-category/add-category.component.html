@@ -1,0 +1,31 @@
+<h1>Add new category</h1>
+<div class="h-1.5 mt-2">
+  <mat-progress-bar *ngIf="saving" mode="indeterminate"></mat-progress-bar>
+</div>
+<form [formGroup]="form" class="flex flex-col mt-4">
+  <mat-form-field class="mb-2">
+    <mat-label>Name</mat-label>
+    <input
+      matInput
+      type="text"
+      formControlName="categoryName"
+      [readonly]="saving"
+    />
+    <mat-error *ngIf="form.get('categoryName').hasError('required')"
+      >This field is required</mat-error
+    >
+  </mat-form-field>
+</form>
+<div class="flex justify-between mt-4">
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="save()"
+    [disabled]="this.form.invalid || saving"
+  >
+    Save
+  </button>
+  <button mat-stroked-button (click)="cancel()" [disabled]="saving">
+    Cancel
+  </button>
+</div>

@@ -1,8 +1,12 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { catchError, of } from 'rxjs';
 import { BlogPostsService } from 'src/app/services/blog-posts/blog-posts.service';
 import { Post } from 'src/app/services/blog-posts/models/post';
-import { AddPostDialogComponent } from '../add-post-dialog/add-post-dialog.component';
+import { AddEditPostDialogComponent } from '../add-edit-post-dialog/add-edit-post-dialog.component';
+import { ConfirmationDialogModel } from '../confirmation-dialog/models/confirmation-dialog-model';
+import { MessageService } from './../../services/message-service/message.service';
 import { ConfirmationDialogComponent } from './../confirmation-dialog/confirmation-dialog.component';
 
 @Component({
@@ -22,14 +26,16 @@ export class PostComponent implements OnInit {
 
   constructor(
     private blogPostsService: BlogPostsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {}
 
   public editPost(): void {
-    const dialogRef = this.dialog.open(AddPostDialogComponent, {
+    const dialogRef = this.dialog.open(AddEditPostDialogComponent, {
       data: this.post,
+      width: '40rem',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -40,14 +46,46 @@ export class PostComponent implements OnInit {
   }
 
   public deletePost(): void {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+    const dialogData = new ConfirmationDialogModel(
+      'Are you sure you want to delete this post?',
+      'warning'
+    );
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: dialogData,
+    });
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
-        this.blogPostsService.deletePost(this.post.id).subscribe((res) => {
-          this.postDeleted.emit();
-        });
+        this.blogPostsService
+          .deletePost(this.post.id)
+          .pipe(
+            catchError((error: HttpErrorResponse) => {
+              this.setErrorMessage('Something went wrong, please try again.');
+              return of(error);
+            })
+          )
+          .subscribe((error: void | HttpErrorResponse) => {
+            if (!error) {
+              this.setInfoMessage('Post was successfully deleted.');
+              this.postDeleted.emit();
+            }
+          });
       }
+    });
+  }
+
+  private setInfoMessage(message: string): void {
+    this.messageService.setMessageWithAutoclose({
+      message,
+      messageType: 'INFO',
+    });
+  }
+
+  private setErrorMessage(message: string): void {
+    this.messageService.setMessageWithAutoclose({
+      message,
+      messageType: 'ERROR',
     });
   }
 }
