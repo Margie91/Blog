@@ -24,7 +24,6 @@ export class MessageService {
     }
     this.timeoutId = setTimeout(() => {
       this.setMessage(null);
-    }, 3000);
-    console.log('timeoutId', this.timeoutId);
+    }, 4000);
   }
 }

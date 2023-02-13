@@ -1,12 +1,11 @@
 <ng-container *ngIf="$posts | async as posts">
   <div class="flex flex-col w-full">
     <ng-container *ngIf="posts?.length; else noResults">
-      <!-- <ng-container *ngIf="posts?.length; else noResults"> -->
       <app-post
         class="mb-4"
         *ngFor="let post of $posts | async"
         [post]="post"
-        (postDeleted)="onPostDeleted()"
+        (postEvent)="onPostEvent()"
       ></app-post>
     </ng-container>
   </div>

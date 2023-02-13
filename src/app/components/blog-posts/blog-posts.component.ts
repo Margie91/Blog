@@ -19,7 +19,7 @@ import { MessageService } from './../../services/message-service/message.service
 })
 export class BlogPostsComponent implements OnInit, OnChanges {
   @Input()
-  private newPostSubject: Subject<void>;
+  private postEventSubject: Subject<void>;
 
   @Input()
   private searchInputSubject: Subject<string>;
@@ -31,6 +31,7 @@ export class BlogPostsComponent implements OnInit, OnChanges {
   public posts: Post[];
   public noResultsMsg = 'There are no posts right now';
   public $posts: Observable<Post[]>;
+
   constructor(
     private blogService: BlogPostsService,
     private messageService: MessageService
@@ -41,7 +42,7 @@ export class BlogPostsComponent implements OnInit, OnChanges {
     this.searchInputSubject.subscribe((searchTerm: string) => {
       this.getPosts(searchTerm);
     });
-    this.newPostSubject.subscribe(() => {
+    this.postEventSubject.subscribe(() => {
       this.getPosts();
     });
   }
@@ -49,16 +50,15 @@ export class BlogPostsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes?.pickedCategoryId?.currentValue) {
       this.getPostsByCategory();
-      this.noResultsMsg = 'There are no posts for this category';
     } else {
       this.getPosts();
-      this.noResultsMsg = 'There are no posts right now';
     }
   }
 
   private getPosts(searchTerm?: string): void {
     this.loadingPosts = true;
-    let $postRequest;
+    let $postRequest: Observable<GetPostsResponse>;
+
     if (searchTerm) {
       $postRequest = this.blogService.searchPosts(searchTerm);
     } else {
@@ -89,7 +89,9 @@ export class BlogPostsComponent implements OnInit, OnChanges {
         map((response) => response.resultData),
         map(this.sortByDate),
         catchError(() => {
-          this.setErrorMessage('Something went wrong, please try again.');
+          this.setErrorMessage(
+            'Something went wrong with fetching posts, please try again.'
+          );
           return of(null);
         }),
         finalize(() => {
@@ -98,7 +100,7 @@ export class BlogPostsComponent implements OnInit, OnChanges {
       );
   }
 
-  private sortByDate(posts): Post[] {
+  private sortByDate(posts: Post[]): Post[] {
     return posts.sort((a, b) =>
       new Date(a.createdAt) < new Date(b.createdAt) ? 1 : -1
     );
@@ -111,7 +113,8 @@ export class BlogPostsComponent implements OnInit, OnChanges {
     });
   }
 
-  public onPostDeleted(): void {
+  public onPostEvent(): void {
     this.getPosts();
+    this.postEventSubject.next();
   }
 }

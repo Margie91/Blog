@@ -1,7 +1,6 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { catchError, finalize, Observable, of } from 'rxjs';
+import { catchError, finalize, Observable, of, Subject } from 'rxjs';
 import { BlogPostsService } from 'src/app/services/blog-posts/blog-posts.service';
 import { Category } from './../../services/blog-posts/models/category';
 import { MessageService } from './../../services/message-service/message.service';
@@ -16,8 +15,12 @@ export class CategoryComponent implements OnInit {
   public $categories: Observable<any>;
   public loadingCategories = true;
 
+  @Input()
+  private postEventSubject: Subject<void>;
+
   @Output()
   public pickedCategory = new EventEmitter<number>();
+  public activeCategory = null;
 
   constructor(
     private blogService: BlogPostsService,
@@ -37,14 +40,15 @@ export class CategoryComponent implements OnInit {
         this.loadingCategories = false;
       })
     );
+
+    this.postEventSubject.subscribe(() => {
+      this.onClickCategory(null);
+    });
   }
 
   public onClickCategory(category: Category): void {
-    if (category) {
-      this.pickedCategory.emit(category.id);
-    } else {
-      this.pickedCategory.emit(null);
-    }
+    this.activeCategory = category?.id || null;
+    this.pickedCategory.emit(this.activeCategory);
   }
 
   public addNewCategory(): void {
@@ -54,10 +58,9 @@ export class CategoryComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log(this.loadingCategories);
         this.loadingCategories = true;
         this.$categories = this.blogService.getCategories().pipe(
-          catchError((error: HttpErrorResponse) => {
+          catchError(() => {
             this.setErrorMessage(
               'Something went wrong with fetching categories, please try again.'
             );

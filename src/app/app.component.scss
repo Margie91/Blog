@@ -1,12 +1,10 @@
-* {
-  box-sizing: border-box;
-}
-
-.navigation {
-  background-color: rgb(43, 43, 43);
-}
-
 :host {
   display: block;
-  background-color: #eae7ef;
+}
+
+.main-container {
+  height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 }

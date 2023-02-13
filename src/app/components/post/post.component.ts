@@ -19,10 +19,7 @@ export class PostComponent implements OnInit {
   public post: Post;
 
   @Output()
-  public postDeleted = new EventEmitter<void>();
-
-  @Output()
-  public postEdited = new EventEmitter<void>();
+  public postEvent = new EventEmitter<void>();
 
   constructor(
     private blogPostsService: BlogPostsService,
@@ -40,7 +37,7 @@ export class PostComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.postDeleted.emit();
+        this.postEvent.emit();
       }
     });
   }
@@ -61,14 +58,16 @@ export class PostComponent implements OnInit {
           .deletePost(this.post.id)
           .pipe(
             catchError((error: HttpErrorResponse) => {
-              this.setErrorMessage('Something went wrong, please try again.');
+              this.setErrorMessage(
+                'Something went wrong with deleting the post, please try again.'
+              );
               return of(error);
             })
           )
           .subscribe((error: void | HttpErrorResponse) => {
             if (!error) {
               this.setInfoMessage('Post was successfully deleted.');
-              this.postDeleted.emit();
+              this.postEvent.emit();
             }
           });
       }

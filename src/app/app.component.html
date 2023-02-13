@@ -1,7 +1,10 @@
 <nav
   class="bg-zinc-700 text-white flex flex-row items-center justify-between px-3 py-4"
 >
-  <h2>My Blog</h2>
+  <div class="flex">
+    <mat-icon>account_circle</mat-icon>
+    <h2 class="ml-2">My Blog</h2>
+  </div>
   <div>
     <input
       class="mr-3 rounded-md px-2 py-1 outline-none text-black"
@@ -9,15 +12,15 @@
       [formControl]="searchExperienceField"
     />
     <ng-template #menuItems let-mobile>
-      <div [ngClass]="mobile ? 'flex flex-col px-3' : 'inline'">
-        <span [ngClass]="{ 'mr-2': !mobile }">Link 1</span>
-        <hr class="my-1" *ngIf="mobile" />
-        <span [ngClass]="{ 'mr-2': !mobile }">Link 2</span>
-        <hr class="my-1" *ngIf="mobile" />
-        <span [ngClass]="{ 'mr-2': !mobile }">Link 3</span>
-        <hr class="my-1" *ngIf="mobile" />
-        <span [ngClass]="{ 'mr-2': !mobile }">My Profile</span>
-        <hr class="my-1" *ngIf="mobile" />
+      <div
+        [ngClass]="
+          mobile ? 'flex flex-col px-3 divide-y divide-solid' : 'inline'
+        "
+      >
+        <span [ngClass]="{ 'mr-2': !mobile, 'py-1': mobile }">Link 1</span>
+        <span [ngClass]="{ 'mr-2': !mobile, 'py-1': mobile }">Link 2</span>
+        <span [ngClass]="{ 'mr-2': !mobile, 'py-1': mobile }">Link 3</span>
+        <span [ngClass]="{ 'mr-2': !mobile, 'py-1': mobile }">My Profile</span>
         <span>Logout</span>
       </div>
     </ng-template>
@@ -34,7 +37,7 @@
     </mat-menu>
   </div>
 </nav>
-<div class="p-4 h-full">
+<main class="p-4 h-full main-container bg-zinc-100">
   <div class="flex justify-between">
     <h1 class="text-3xl">Welcome to my Blog</h1>
     <button
@@ -47,16 +50,17 @@
     </button>
   </div>
   <app-message class="w-full lg:w-[85%] block ml-auto lg:pl-3"></app-message>
-  <div class="flex flex-col lg:flex-row h-full">
+  <aside class="flex flex-col h-full lg:flex-row overflow-hidden">
     <app-category
       class="w-full lg:w-[15%] mr-4 mb-4 lg:mb-0"
       (pickedCategory)="onCategoryPick($event)"
+      [postEventSubject]="postEventSubject"
     ></app-category>
     <app-blog-posts
-      class="w-full lg:w-[85%]"
+      class="w-full h-full lg:w-[85%] overflow-auto"
       [searchInputSubject]="searchInputSubject"
-      [newPostSubject]="newPostSubject"
+      [postEventSubject]="postEventSubject"
       [pickedCategoryId]="pickedCategoryId"
     ></app-blog-posts>
-  </div>
-</div>
+  </aside>
+</main>

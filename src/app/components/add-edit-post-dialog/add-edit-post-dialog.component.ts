@@ -53,12 +53,8 @@ export class AddEditPostDialogComponent implements OnInit {
     }
   }
 
-  public categoryValueDisplay(value1, value2) {
-    if (value1.id == value2.id) {
-      return value1.name;
-    } else {
-      return '';
-    }
+  public categoryValueDisplay(value1: Category, value2: Category): boolean {
+    return value1.id === value2.id;
   }
 
   public post(): void {

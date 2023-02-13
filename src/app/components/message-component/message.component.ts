@@ -17,7 +17,7 @@ export class MessageComponent implements OnInit {
     this.message$ = this.messageService.message;
   }
 
-  public discardError(): void {
+  public discardMessage(): void {
     this.messageService.setMessage(null);
   }
 }

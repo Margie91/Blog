@@ -42,7 +42,9 @@ export class AddCategoryComponent implements OnInit {
       .addCategory(request)
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.setErrorMessage('Something went wrong, please try again.');
+          this.setErrorMessage(
+            'Something went wrong with creating a category, please try again.'
+          );
           return of(error);
         })
       )
