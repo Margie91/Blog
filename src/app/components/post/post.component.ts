@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { catchError, of } from 'rxjs';
 import { BlogPostsService } from 'src/app/services/blog-posts/blog-posts.service';
@@ -14,7 +14,7 @@ import { ConfirmationDialogComponent } from './../confirmation-dialog/confirmati
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.scss'],
 })
-export class PostComponent implements OnInit {
+export class PostComponent {
   @Input()
   public post: Post;
 
@@ -26,8 +26,6 @@ export class PostComponent implements OnInit {
     private dialog: MatDialog,
     private messageService: MessageService
   ) {}
-
-  ngOnInit() {}
 
   public editPost(): void {
     const dialogRef = this.dialog.open(AddEditPostDialogComponent, {

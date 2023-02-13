@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ConfirmationDialogModel } from './models/confirmation-dialog-model';
 
@@ -7,7 +7,7 @@ import { ConfirmationDialogModel } from './models/confirmation-dialog-model';
   templateUrl: './confirmation-dialog.component.html',
   styleUrls: ['./confirmation-dialog.component.scss'],
 })
-export class ConfirmationDialogComponent implements OnInit {
+export class ConfirmationDialogComponent {
   public text: string;
   public matIcon?: string;
 
@@ -18,8 +18,6 @@ export class ConfirmationDialogComponent implements OnInit {
     this.text = this.data.text;
     this.matIcon = this.data.matIcon;
   }
-
-  ngOnInit() {}
 
   public confirm(): void {
     this.dialogRef.close(true);
